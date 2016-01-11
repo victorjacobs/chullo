@@ -5,7 +5,10 @@
         "sourceMap": true
     },
     "files": [
-        "typings/tsd.d.ts",
-        "app.ts"
+        "./typings/tsd.d.ts",
+        "./app.ts",
+        "./routes/index.js",
+        "./routes/upload.ts",
+        "./routes/files.ts"
     ]
 }

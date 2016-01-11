@@ -1,1 +1,2 @@
-export var uploads = require('./uploads');
+export var upload = require('./upload');
+export var files = require('./files');
