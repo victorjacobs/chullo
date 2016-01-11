@@ -1,0 +1,6 @@
+.DS_Store
+.tscache
+*.js
+*.map
+node_modules/
+typings/

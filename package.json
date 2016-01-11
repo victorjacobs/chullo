@@ -1,0 +1,27 @@
+{
+  "name": "chullo",
+  "version": "1.0.0",
+  "description": "File upload API",
+  "main": "js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/victorjacobs/chullo"
+  },
+  "author": "Victor Jacobs",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3",
+    "lodash": "^3.10.1",
+    "mongoose": "^4.3.4",
+    "typescript": "^1.7.5"
+  },
+  "devDependencies": {
+    "grunt-ts": "^5.2.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "matchdep": "^1.0.0"
+  }
+}
