@@ -10,6 +10,8 @@
         "./routes/index.js",
         "./routes/upload.ts",
         "./routes/files.ts",
-        "./models/file.ts"
+        "./routes/users.ts",
+        "./models/file.ts",
+        "./models/user.ts"
     ]
 }

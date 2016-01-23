@@ -7,19 +7,24 @@ interface IFile extends mongoose.Document {
 
 // Schema
 let schema = new mongoose.Schema({
-    name: {
-        type: String
-    }
+    name: String
 });
 
-export var repository = mongoose.model<IFile>('File', schema);
+let repository = mongoose.model<IFile>('File', schema);
 
 // Class
 export class File {
-    private repository = repository;
     private document: IFile;
 
-    constructor(document) {
-        this.repository.create(document);
+    constructor(file) {
+        this.document = new repository(file);
+    }
+
+    save() {
+        return this.document.save();
+    }
+
+    static findOne(id: string) {
+        return repository.findOne(id);
     }
 }

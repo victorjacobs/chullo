@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
 import * as mongoose from 'mongoose';
+var oauthserver = require('oauth2-server');
 
 import * as routes from './routes';
 
@@ -21,9 +22,20 @@ app.use((req, res, next) => {
     next();
 });
 
-// Set up routes
+// OAuth
+var oauth = oauthserver({
+  model: require('./models/oauth'),
+  grants: ['password'],
+  debug: true
+});
+
+// Mount routes
+app.all('/oauth/token', oauth.grant());
 app.use('/upload', routes.upload);
-app.use('/files', routes.files);
+app.use('/files', oauth.authorise(), routes.files);
+app.use('/users', routes.users);
+
+app.use(oauth.errorHandler());
 
 // Boot server
 app.listen(3000);

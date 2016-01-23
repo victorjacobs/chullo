@@ -3,7 +3,7 @@
  */
 
 import {Router} from 'express';
-import * as file from '../models/file';
+import {File} from '../models/file';
 
 let router = Router();
 
@@ -11,16 +11,17 @@ router.get('/', (req, res) => {
     res.send('Hello world');
 });
 
-router.get('/{:id}', (req, res) => {
-
+router.get('/:id', (req, res) => {
+    res.json(File.findOne(req.params.id));
 });
 
 // Create upload entity
 router.post('/', (req, res) => {
-    let test = new file.repository({name: 'test'});
-    test.save((err) => {
-        res.json(test);
-    });
+    let newFile = new File(req.body);
+
+    newFile.save();
+
+    res.json(newFile);
 });
 
 export = router;
