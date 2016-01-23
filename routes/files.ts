@@ -1,23 +1,26 @@
-import {Express} from "express";
 /**
  * Created by Victor on 11/01/16.
  */
 
-var setup = (app: Express): void => {
-    app.get('/files', (req, res) => {
-        res.send('Hello world');
+import {Router} from 'express';
+import * as file from '../models/file';
+
+let router = Router();
+
+router.get('/', (req, res) => {
+    res.send('Hello world');
+});
+
+router.get('/{:id}', (req, res) => {
+
+});
+
+// Create upload entity
+router.post('/', (req, res) => {
+    let test = new file.repository({name: 'test'});
+    test.save((err) => {
+        res.json(test);
     });
+});
 
-    app.get('/files/{:id}', (req, res) => {
-
-    });
-
-    // Create upload entity
-    app.post('/files', (req, res) => {
-        let upload = req.body;
-
-        res.json(upload);
-    });
-};
-
-export = setup;
+export = router;

@@ -9,6 +9,7 @@
         "./app.ts",
         "./routes/index.js",
         "./routes/upload.ts",
-        "./routes/files.ts"
+        "./routes/files.ts",
+        "./models/file.ts"
     ]
 }

@@ -1,9 +1,13 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
+import * as mongoose from 'mongoose';
+
 import * as routes from './routes';
 
+// Boot
 let app = express();
+mongoose.connect('mongodb://localhost/chullo');
 
 // Compression
 app.use(compression());
@@ -18,8 +22,8 @@ app.use((req, res, next) => {
 });
 
 // Set up routes
-routes.upload(app);
-routes.files(app);
+app.use('/upload', routes.upload);
+app.use('/files', routes.files);
 
 // Boot server
 app.listen(3000);

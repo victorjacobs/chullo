@@ -1,12 +1,15 @@
-import {Express} from 'express';
+/**
+ * Uploading files
+ */
+
+import {Router} from 'express';
 import * as multer from 'multer';
 
 var upload = multer({ dest: 'uploads/' });
+var router = Router();
 
-var setup = (app: Express): void => {
-    app.post('/upload', upload.single('randomfilename'), (res, req) => {
+router.post('/', upload.single('randomfilename'), (res, req) => {
 
-    });
-};
+});
 
-export = setup;
+export = router;
