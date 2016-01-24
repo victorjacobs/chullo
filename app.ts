@@ -25,12 +25,13 @@ app.use((req, res, next) => {
 // OAuth
 var oauth = oauthserver({
   model: require('./models/oauth'),
-  grants: ['password'],
-  debug: true
+  grants: ['password']
 });
 
 // Mount routes
-app.all('/oauth/token', oauth.grant());
+app.all('/oauth/token', bodyParser.urlencoded({
+  extended: true
+}), oauth.grant());
 app.use('/upload', routes.upload);
 app.use('/files', oauth.authorise(), routes.files);
 app.use('/users', routes.users);

@@ -8,7 +8,9 @@ import {File} from '../models/file';
 let router = Router();
 
 router.get('/', (req, res) => {
-    res.send('Hello world');
+    res.json({
+        'foo': 'bar'
+    });
 });
 
 router.get('/:id', (req, res) => {
