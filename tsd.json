@@ -28,6 +28,12 @@
     },
     "mongoose/mongoose.d.ts": {
       "commit": "448b4a1cab712b2eeaf94e8384460c8b086a85cd"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "7fffbd3e040a93c244777e3be04cd6223ac69301"
+    },
+    "bcrypt/bcrypt.d.ts": {
+      "commit": "7fffbd3e040a93c244777e3be04cd6223ac69301"
     }
   }
 }

@@ -4,6 +4,8 @@ import * as compression from 'compression';
 import * as mongoose from 'mongoose';
 var oauthserver = require('oauth2-server');
 
+import {User} from './models/user';
+
 import * as routes from './routes';
 
 // Boot
@@ -23,18 +25,26 @@ app.use((req, res, next) => {
 });
 
 // OAuth
-var oauth = oauthserver({
+let oauth = oauthserver({
   model: require('./models/oauth'),
-  grants: ['password']
+  grants: ['password', 'refresh_token']
 });
+
+// TODO move this to another file
+let injectUser = (req, res, next) => {
+    User.findOne({ _id: req.user.id }, (err, user) => {
+        req.user = user;
+        next();
+    });
+}
 
 // Mount routes
 app.all('/oauth/token', bodyParser.urlencoded({
   extended: true
 }), oauth.grant());
 app.use('/upload', routes.upload);
-app.use('/files', oauth.authorise(), routes.files);
-app.use('/users', routes.users);
+app.use('/files', oauth.authorise(), injectUser, routes.files);
+app.use('/users', oauth.authorise(), injectUser, routes.users);
 
 app.use(oauth.errorHandler());
 
