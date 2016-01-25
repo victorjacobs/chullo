@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 
 // OAuth
 let oauth = oauthserver({
-  model: require('./models/oauth'),
+  model: require('./oauth'),
   grants: ['password', 'refresh_token']
 });
 

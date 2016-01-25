@@ -7,13 +7,13 @@
     "files": [
         "./typings/tsd.d.ts",
         "./app.ts",
+        "./oauth.ts",
         "./routes/index.ts",
         "./routes/upload.ts",
         "./routes/files.ts",
         "./routes/users.ts",
         "./models/file.ts",
         "./models/user.ts",
-        "./models/oauth.ts",
         "./models/oauth/oauthAccessToken.ts",
         "./models/oauth/oauthRefreshToken.ts",
         "./models/oauth/oauthClient.ts"

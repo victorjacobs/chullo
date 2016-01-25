@@ -1,30 +1,37 @@
 import * as mongoose from 'mongoose';
 
-// Interface
+// Typescript
 interface IFile extends mongoose.Document {
-    name: string;
+    name: string;   // Name of the file, e.g. foo.jpg
+    path: string;   // Path to file
+    userId: string;
+    createdAt: Date;
+}
+
+interface FileModel extends mongoose.Model<IFile> {
+
 }
 
 // Schema
 let schema = new mongoose.Schema({
-    name: String
-});
-
-let repository = mongoose.model<IFile>('File', schema);
-
-// Class
-export class File {
-    private document: IFile;
-
-    constructor(file) {
-        this.document = new repository(file);
+    name: {
+        type: String,
+        required: true
+    },
+    path: {
+        type: String
+    },
+    userId: {
+        type: String,
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        required: true,
+        default: new Date()
     }
+})
+    .method('getUploadUrl')
+;
 
-    save() {
-        return this.document.save();
-    }
-
-    static findOne(id: string) {
-        return repository.findOne(id);
-    }
-}
+export let File = <FileModel> mongoose.model<IFile>('File', schema);

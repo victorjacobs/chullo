@@ -1,3 +1,3 @@
-export var upload = require('./upload');
-export var files = require('./files');
-export var users = require('./users')
+export let upload = require('./upload');
+export let files = require('./files');
+export let users = require('./users');

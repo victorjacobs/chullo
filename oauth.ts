@@ -1,7 +1,7 @@
-import {OAuthAccessToken} from './oauth/oauthAccessToken';
-import {OAuthRefreshToken} from './oauth/oauthRefreshToken';
-import {OAuthClient} from './oauth/oauthClient';
-import {User} from './user';
+import {OAuthAccessToken} from './models/oauth/oauthAccessToken';
+import {OAuthRefreshToken} from './models/oauth/oauthRefreshToken';
+import {OAuthClient} from './models/oauth/oauthClient';
+import {User} from './models/user';
 import * as _ from 'lodash';
 
 var model = module.exports;
