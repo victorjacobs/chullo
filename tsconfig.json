@@ -12,6 +12,8 @@
         "./routes/upload.ts",
         "./routes/files.ts",
         "./routes/users.ts",
+        "./routes/download.ts",
+        "./routes/view.ts",
         "./models/file.ts",
         "./models/user.ts",
         "./models/oauth/oauthAccessToken.ts",

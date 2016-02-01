@@ -3,12 +3,12 @@ import * as mongoose from 'mongoose';
 // Typescript
 interface IFile extends mongoose.Document {
     name: string;   // Name of the file, e.g. foo.jpg
-    path: string;   // Path to file
+    path?: string;   // Path to file
     userId: string;
     createdAt: Date;
     updatedAt: Date;
-    size: number;
-    mime: string;
+    size?: number;
+    mime?: string;
 }
 
 interface FileModel extends mongoose.Model<IFile> {
@@ -42,5 +42,6 @@ let schema = new mongoose.Schema({
     timestamps: {}
 })
 ;
+
 
 export let File = <FileModel> mongoose.model<IFile>('File', schema);

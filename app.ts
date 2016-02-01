@@ -28,28 +28,27 @@ let oauth = oauthserver({
 });
 
 // TODO move this to another file
-let oauthMiddleware = [
-    oauth.authorise(),
-    (req, res, next) => {
-        User.findOne({ _id: req.user.id }, (err, user) => {
-            req.user = user;
-            next();
-        });
-    }
-];
+let injectUser = (req, res, next) => {
+    User.findOne({ _id: req.user.id }, (err, user) => {
+        req.user = user;
+        next();
+    });
+};
 
 // TODO make empty responses consistent by using middleware
 
 // Mount routes
+app.use('/d', routes.download);
+app.use('/v', routes.view);
 app.all('/oauth/token', bodyParser.urlencoded({
     extended: true
 }), oauth.grant());
-app.use('/upload', oauthMiddleware, routes.upload);
+app.use('/upload', oauth.authorise(), injectUser, routes.upload);
 
 // Body parsing
 app.use(bodyParser.json());
-app.use('/files', oauthMiddleware, routes.files);
-app.use('/users', oauthMiddleware, routes.users);
+app.use('/files', oauth.authorise(), injectUser, routes.files);
+app.use('/users', oauth.authorise(), routes.users);
 
 app.use(oauth.errorHandler());
 
