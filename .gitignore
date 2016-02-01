@@ -6,3 +6,5 @@ node_modules/
 typings/
 .idea/
 *.paw
+uploads/*
+!.gitkeep

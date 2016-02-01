@@ -15,9 +15,6 @@ mongoose.connect('mongodb://localhost/chullo');
 // Compression
 app.use(compression());
 
-// Body parsing
-app.use(bodyParser.json());
-
 // Set return content type to json
 app.use((req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
@@ -31,20 +28,28 @@ let oauth = oauthserver({
 });
 
 // TODO move this to another file
-let injectUser = (req, res, next) => {
-    User.findOne({ _id: req.user.id }, (err, user) => {
-        req.user = user;
-        next();
-    });
-}
+let oauthMiddleware = [
+    oauth.authorise(),
+    (req, res, next) => {
+        User.findOne({ _id: req.user.id }, (err, user) => {
+            req.user = user;
+            next();
+        });
+    }
+];
+
+// TODO make empty responses consistent by using middleware
 
 // Mount routes
 app.all('/oauth/token', bodyParser.urlencoded({
-  extended: true
+    extended: true
 }), oauth.grant());
-app.use('/upload', routes.upload);
-app.use('/files', oauth.authorise(), injectUser, routes.files);
-app.use('/users', oauth.authorise(), injectUser, routes.users);
+app.use('/upload', oauthMiddleware, routes.upload);
+
+// Body parsing
+app.use(bodyParser.json());
+app.use('/files', oauthMiddleware, routes.files);
+app.use('/users', oauthMiddleware, routes.users);
 
 app.use(oauth.errorHandler());
 

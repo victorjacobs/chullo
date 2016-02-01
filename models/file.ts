@@ -6,6 +6,9 @@ interface IFile extends mongoose.Document {
     path: string;   // Path to file
     userId: string;
     createdAt: Date;
+    updatedAt: Date;
+    size: number;
+    mime: string;
 }
 
 interface FileModel extends mongoose.Model<IFile> {
@@ -23,15 +26,21 @@ let schema = new mongoose.Schema({
     },
     userId: {
         type: String,
-        required: true
-    },
-    createdAt: {
-        type: Date,
         required: true,
-        default: new Date()
+        index: true
+    },
+    size: {
+        type: Number
+    },
+    mime: {
+        type: String
     }
+}, {
+    toJSON: {
+        versionKey: false
+    },
+    timestamps: {}
 })
-    .method('getUploadUrl')
 ;
 
 export let File = <FileModel> mongoose.model<IFile>('File', schema);
