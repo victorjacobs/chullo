@@ -14,8 +14,9 @@ services:
     # - postgres
     # http://devcenter.wercker.com/docs/services/postgresql.html
 
-    - mongodb
+    # - mongodb
     # http://devcenter.wercker.com/docs/services/mongodb.html
+    - id: mongodb
 build:
   # The steps that will be executed on build
   # Steps make up the actions in your pipeline
@@ -25,7 +26,7 @@ build:
     # A step that executes `npm install` command
     - npm-install
     # A step that executes `npm test` command
-    - npm-test
+    #- npm-test
 
     # A custom script step, name value is used in the UI
     # and the code value contains the command that get executed
