@@ -23,3 +23,11 @@ build:
         code: |
           echo "node version $(node -v) running"
           echo "npm version $(npm -v) running"
+deploy:
+  steps:
+    - internal/docker-push:
+        username: $USERNAME
+        password: $PASSWORD
+        ports: "5000"
+        repository: vjacobs/chullo
+        registry: https://registry.hub.docker.com
