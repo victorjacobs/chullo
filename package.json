@@ -1,10 +1,11 @@
 {
   "name": "chullo",
-  "version": "1.0.0",
-  "description": "File upload API",
+  "version": "0.0.1",
+  "description": "A hat that eats files through a REST API and then serves them",
   "main": "js/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf dist && tsc",
+    "prepublish": "typings install && npm run build"
   },
   "repository": {
     "type": "git",
@@ -22,11 +23,5 @@
     "multer": "^1.1.0",
     "oauth2-server": "^2.4.1",
     "typescript": "^1.7.5"
-  },
-  "devDependencies": {
-    "grunt-ts": "^5.2.0",
-    "grunt": "^0.4.5",
-    "grunt-contrib-watch": "^0.6.1",
-    "matchdep": "^1.0.0"
   }
 }

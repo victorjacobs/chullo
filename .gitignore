@@ -1,7 +1,6 @@
 .DS_Store
 .tscache
-*.js
-*.map
+dist/
 node_modules/
 typings/
 .idea/

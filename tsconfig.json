@@ -2,22 +2,12 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es5",
-        "sourceMap": true
+        "sourceMap": true,
+        "outDir": "dist/"
     },
-    "files": [
-        "./typings/tsd.d.ts",
-        "./app.ts",
-        "./oauth.ts",
-        "./routes/index.ts",
-        "./routes/upload.ts",
-        "./routes/files.ts",
-        "./routes/users.ts",
-        "./routes/download.ts",
-        "./routes/view.ts",
-        "./models/file.ts",
-        "./models/user.ts",
-        "./models/oauth/oauthAccessToken.ts",
-        "./models/oauth/oauthRefreshToken.ts",
-        "./models/oauth/oauthClient.ts"
+    "exclude": [
+      "typings/browser.d.ts",
+      "typings/browser",
+      "node_modules"
     ]
 }
