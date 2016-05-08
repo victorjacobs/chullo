@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
 import * as mongoose from 'mongoose';
-var oauthserver = require('oauth2-server');
+import * as oauth from './oauth';
 
 import {User} from './models/user';
 
@@ -22,10 +22,10 @@ app.use((req, res, next) => {
 });
 
 // OAuth
-let oauth = oauthserver({
-  model: require('./oauth'),
-  grants: ['password', 'refresh_token']
-});
+// let oauth = oauthserver({
+//   model: require('./oauth'),
+//   grants: ['password', 'refresh_token']
+// });
 
 // TODO move this to another file
 let injectUser = (req, res, next) => {
@@ -40,17 +40,16 @@ let injectUser = (req, res, next) => {
 // Mount routes
 app.use('/d', routes.download);
 app.use('/v', routes.view);
-app.all('/oauth/token', bodyParser.urlencoded({
-    extended: true
-}), oauth.grant());
-app.use('/upload', oauth.authorise(), injectUser, routes.upload);
+// bodyParser.urlencoded({ extended: true })
+app.all('/oauth/token', bodyParser.urlencoded({ extended: true }), oauth.isClientAuthenticated, oauth.server.token(), oauth.server.errorHandler());
+app.use('/upload', oauth.isBearerAuthenticated, injectUser, routes.upload);
 
 // Body parsing
 app.use(bodyParser.json());
-app.use('/files', oauth.authorise(), injectUser, routes.files);
-app.use('/users', oauth.authorise(), routes.users);
+app.use('/files', oauth.isBearerAuthenticated, injectUser, routes.files);
+app.use('/users', oauth.isBearerAuthenticated, routes.users);
 
-app.use(oauth.errorHandler());
+// app.use(oauth.errorHandler());
 
 // Boot server
 app.listen(3000);

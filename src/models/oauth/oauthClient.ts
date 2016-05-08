@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-interface IOAuthClient extends mongoose.Document {
+export interface IOAuthClient extends mongoose.Document {
     clientId: string;
     clientSecret: string;
     redirectUri: string;

@@ -6,9 +6,12 @@
     "express": "github:DefinitelyTyped/DefinitelyTyped/express/express.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
     "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
     "mime": "github:DefinitelyTyped/DefinitelyTyped/mime/mime.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
+    "moment": "registry:dt/moment#2.8.0+20160316155526",
     "mongoose": "github:DefinitelyTyped/DefinitelyTyped/mongoose/mongoose.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
     "multer": "github:DefinitelyTyped/DefinitelyTyped/multer/multer.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
+    "passport": "registry:dt/passport#0.2.0+20160317120654",
+    "passport-http-bearer": "registry:dt/passport-http-bearer#1.0.1+20160316155526",
     "serve-static": "github:DefinitelyTyped/DefinitelyTyped/serve-static/serve-static.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf"
   }
 }

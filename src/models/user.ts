@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
 
 // Typescript types
-interface IUser extends mongoose.Document {
+export interface IUser extends mongoose.Document {
     emailAddress: string;
     password: string;
     firstName?: string;
@@ -31,7 +31,7 @@ let schema = new mongoose.Schema({
     firstName: String,
     lastName: String
 })
-    .pre('save', (next) => {
+    .pre('save', next => {
         let user: IUser = this;
 
         // On changing password, re-hash
@@ -50,7 +50,7 @@ let schema = new mongoose.Schema({
             bcrypt.compare(password, user.password, (err, same) => {
                 if (err || !same) return cb(err);
 
-                cb(null, user._id);
+                cb(null, user);
             })
         });
     })
