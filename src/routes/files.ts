@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {File} from '../models/file';
+import * as fs from 'fs';
 
 let router = Router();
 
@@ -38,7 +39,11 @@ router.post('/', (req, res) => {
 });
 
 router.delete('/:fileId', (req, res, next) => {
-    console.log('to implement: delete');
+    // File.findOne({ _id: req.params.fileId, userId: req.user._id }).remove(() => {
+    //
+    //     next();
+    // });
+    console.log('to implement');
     next();
 });
 
