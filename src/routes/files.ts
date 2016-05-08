@@ -37,4 +37,10 @@ router.post('/', (req, res) => {
     });
 });
 
+router.delete('/:fileId', (req, res, next) => {
+    console.log('to implement: delete');
+    next();
+});
+
+
 export = router;

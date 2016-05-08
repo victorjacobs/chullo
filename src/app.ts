@@ -27,14 +27,6 @@ app.use((req, res, next) => {
 //   grants: ['password', 'refresh_token']
 // });
 
-// TODO move this to another file
-let injectUser = (req, res, next) => {
-    User.findOne({ _id: req.user.id }, (err, user) => {
-        req.user = user;
-        next();
-    });
-};
-
 // TODO make empty responses consistent by using middleware
 
 // Mount routes
@@ -42,11 +34,11 @@ app.use('/d', routes.download);
 app.use('/v', routes.view);
 // bodyParser.urlencoded({ extended: true })
 app.all('/oauth/token', bodyParser.urlencoded({ extended: true }), oauth.isClientAuthenticated, oauth.server.token(), oauth.server.errorHandler());
-app.use('/upload', oauth.isBearerAuthenticated, injectUser, routes.upload);
+app.use('/upload', oauth.isBearerAuthenticated, routes.upload);
 
 // Body parsing
 app.use(bodyParser.json());
-app.use('/files', oauth.isBearerAuthenticated, injectUser, routes.files);
+app.use('/files', oauth.isBearerAuthenticated, routes.files);
 app.use('/users', oauth.isBearerAuthenticated, routes.users);
 
 // app.use(oauth.errorHandler());

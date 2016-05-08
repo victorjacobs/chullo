@@ -6,7 +6,7 @@ var upload = multer({ dest: './uploads/' });
 var router = Router();
 
 router.post('/:fileId', upload.single('file'), (req, res) => {
-    File.findOne({ _id: req.params.fileId, userId: req.user._id}, (err, file) => {
+    File.findOne({ _id: req.params.fileId, userId: req.user._id }, (err, file) => {
         if (err) return res.status(400).json(err);
         if (!file) return res.status(404).json({});
 

@@ -9,9 +9,9 @@ import {OAuthAccessToken} from './models/oauth/oauthAccessToken';
 import {OAuthRefreshToken} from './models/oauth/oauthRefreshToken';
 import {OAuthClient} from './models/oauth/oauthClient';
 
+// Bearer strategy
 passport.use(new bearer.Strategy(
     (token, done) => {
-        console.log(token);
         OAuthAccessToken.findOne({ accessToken: token }, (err, accessToken) => {
             if (err) return done(err);
             if (!accessToken) return done(null, false);
@@ -30,6 +30,7 @@ passport.use(new bearer.Strategy(
     }
 ));
 
+// Clientid and secret
 passport.use(new clientPassword.Strategy(
     (clientId, clientSecret, done) => {
         OAuthClient.findOne({ clientId: clientId, clientSecret: clientSecret}, (err, client) => {
@@ -41,6 +42,7 @@ passport.use(new clientPassword.Strategy(
     }
 ));
 
+// Create access/refresh token pair
 let grantToken = (client, user, cb) => {
     let accessToken = OAuthAccessToken.newForClientAndUser(client, user);
     let refreshToken = OAuthRefreshToken.newForClientAndUser(client, user);
@@ -54,6 +56,7 @@ let grantToken = (client, user, cb) => {
 }
 
 export let server = oauth2orize.createServer();
+// Password grant
 server.exchange(oauth2orize.exchange.password((client, username, password, scope, done) => {
     User.findWithPassword(username, password, (err, user) => {
         if (err) return done(err);
@@ -63,6 +66,7 @@ server.exchange(oauth2orize.exchange.password((client, username, password, scope
     });
 }));
 
+// Refresh token grant
 server.exchange(oauth2orize.exchange.refreshToken((client, refreshToken, scope, done) => {
     OAuthRefreshToken.findOne({ refreshToken: refreshToken }, (err, token) => {
         if (err) return done(err);
