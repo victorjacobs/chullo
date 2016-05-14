@@ -18,7 +18,7 @@ passport.use(new bearer.Strategy(
 
             if (moment(accessToken.expires).isBefore(moment())) {
                 // token expired
-                OAuthAccessToken.findById(token).remove().exec();
+                OAuthAccessToken.findById(accessToken._id).remove().exec();
                 return done(null, false);
             }
 
@@ -48,6 +48,7 @@ let grantToken = (client, user, cb) => {
     let refreshToken = OAuthRefreshToken.newForClientAndUser(client, user);
     accessToken.save((err, token) => {
         if (err) return cb(err);
+        // TODO promise chaining here
         refreshToken.save((err, token) => {
             if (err) return cb(err);
             return cb(null, accessToken.accessToken, refreshToken.refreshToken);

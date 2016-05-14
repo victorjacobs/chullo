@@ -21,12 +21,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// OAuth
-// let oauth = oauthserver({
-//   model: require('./oauth'),
-//   grants: ['password', 'refresh_token']
-// });
-
 // TODO make empty responses consistent by using middleware
 
 // Mount routes
@@ -40,6 +34,7 @@ app.use('/upload', oauth.isBearerAuthenticated, routes.upload);
 app.use(bodyParser.json());
 app.use('/files', oauth.isBearerAuthenticated, routes.files);
 app.use('/users', oauth.isBearerAuthenticated, routes.users);
+app.use('/status', oauth.isBearerAuthenticated, routes.status);
 
 // app.use(oauth.errorHandler());
 

@@ -10,19 +10,16 @@ router.get('/', (req, res) => {
         if (err) return res.status(400).json(err);
         if (results.length === 0) return res.status(204);
 
-        console.log(req.headers['host']);
-
         res.json(results);
     })
 });
 
-router.get('/:fileId', (req, res, next) => {
+router.get('/:fileId', (req, res) => {
     File.findOne({ _id: req.params.fileId, userId: req.user._id }, '-_id -userId -path', (err, file) => {
         if (err) return res.status(400).json(err);
         if (!file) return res.status(404).json({});
 
         res.json(file);
-        next();
     });
 });
 
@@ -38,13 +35,14 @@ router.post('/', (req, res) => {
     });
 });
 
-router.delete('/:fileId', (req, res, next) => {
-    // File.findOne({ _id: req.params.fileId, userId: req.user._id }).remove(() => {
-    //
-    //     next();
-    // });
-    console.log('to implement');
-    next();
+router.delete('/:fileId', (req, res) => {
+    File.findOne({ _id: req.params.fileId, userId: req.user._id }, (err, file) => {
+        file.remove((err) => {
+            if (err) return res.status(400).json(err);
+            fs.unlinkSync(file.path);
+            res.status(204).send({});
+        });
+    });
 });
 
 
