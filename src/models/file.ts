@@ -9,6 +9,8 @@ interface IFile extends mongoose.Document {
     updatedAt: Date;
     size?: number;
     mime?: string;
+    accesses: number;
+    lastAccess?: Date;
 }
 
 interface FileModel extends mongoose.Model<IFile> {
@@ -34,14 +36,19 @@ let schema = new mongoose.Schema({
     },
     mime: {
         type: String
-    }
+    },
+    accesses: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    lastAccess: Date
 }, {
     toJSON: {
         versionKey: false
     },
     timestamps: {}
-})
-;
+});
 
 
 export let File = <FileModel> mongoose.model<IFile>('File', schema);

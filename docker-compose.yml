@@ -1,0 +1,23 @@
+mongo_data:
+    image: busybox
+    volumes:
+        - /data/db
+mongo:
+    image: mongo
+    ports:
+        - 27017:27017
+    volumes_from:
+        - mongo_data
+node:
+    image: node
+    links:
+        - mongo
+nginx:
+    image: nginx
+    ports:
+        - 80:80
+    links:
+        - node
+    volumes:
+        - ./logs/nginx:/var/log/nginx
+        - .:/var/www/html
