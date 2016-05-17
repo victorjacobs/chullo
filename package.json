@@ -2,11 +2,12 @@
   "name": "chullo",
   "version": "0.0.1",
   "description": "A hat that eats files through a REST API and then serves them",
-  "main": "js/app.js",
+  "main": "dist/app.js",
   "scripts": {
     "build": "rm -rf dist && tsc",
     "prepublish": "typings install && npm run build",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "clean": "rm -rf dist node_modules typings"
   },
   "repository": {
     "type": "git",

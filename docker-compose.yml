@@ -3,21 +3,29 @@ mongo_data:
     volumes:
         - /data/db
 mongo:
-    image: mongo
+    image: mongo:3.3
     ports:
         - 27017:27017
     volumes_from:
         - mongo_data
+data:
+    image: busybox
+    volumes:
+        - /src/uploads
 node:
-    image: node
+    build: .
     links:
         - mongo
-nginx:
-    image: nginx
+        - data
     ports:
-        - 80:80
-    links:
-        - node
-    volumes:
-        - ./logs/nginx:/var/log/nginx
-        - .:/var/www/html
+        - 3000
+
+# nginx:
+#     image: nginx
+#     ports:
+#         - 80:80
+#     links:
+#         - node
+#     volumes:
+#         - ./logs/nginx:/var/log/nginx
+#         - .:/var/www/html
