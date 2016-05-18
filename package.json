@@ -7,7 +7,8 @@
     "build": "rm -rf dist && tsc",
     "prepublish": "typings install && npm run build",
     "watch": "tsc -w",
-    "clean": "rm -rf dist node_modules typings"
+    "clean": "rm -rf dist node_modules typings",
+    "docker-build": "npm run clean && docker build -t vjacobs/chullo ."
   },
   "repository": {
     "type": "git",

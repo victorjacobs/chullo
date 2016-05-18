@@ -1,0 +1,8 @@
+node:
+    volumes_from:
+        - data
+    entrypoint: []
+data:
+    image: busybox
+    volumes:
+        - /app/uploads

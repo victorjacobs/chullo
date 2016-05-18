@@ -3,22 +3,20 @@ mongo_data:
     volumes:
         - /data/db
 mongo:
-    image: mongo:3.3
+    image: mongo:3.2
     ports:
         - 27017:27017
     volumes_from:
         - mongo_data
-data:
-    image: busybox
-    volumes:
-        - /src/uploads
 node:
-    build: .
+    image: vjacobs/chullo
     links:
         - mongo
-        - data
+    volumes:
+        - .:/app
     ports:
-        - 3000
+        - 3000:3000
+    entrypoint: ['nodemon', '/app/dist/app.js']
 
 # nginx:
 #     image: nginx

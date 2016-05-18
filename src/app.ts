@@ -10,7 +10,7 @@ import * as routes from './routes';
 
 // Boot
 let app = express();
-mongoose.connect('mongodb://localhost/chullo');
+mongoose.connect('mongodb://chulloserver_mongo_1/chullo');
 
 // Compression
 app.use(compression());
