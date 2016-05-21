@@ -1,7 +1,7 @@
 node:
     volumes_from:
         - data
-    entrypoint: []
+    entrypoint: ["forever", "/app/dist/app.js"]
 data:
     image: busybox
     volumes:

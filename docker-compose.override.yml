@@ -1,0 +1,4 @@
+node:
+    volumes:
+        - .:/app
+    entrypoint: ["./entrypoint.sh"]

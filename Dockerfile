@@ -8,4 +8,4 @@ WORKDIR /app
 RUN npm install --unsafe-perm
 
 EXPOSE 3000
-CMD ["forever", "/app/dist/app.js"]
+ENTRYPOINT ["forever", dist/app.js"]

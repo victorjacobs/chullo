@@ -12,18 +12,5 @@ node:
     image: vjacobs/chullo
     links:
         - mongo
-    volumes:
-        - .:/app
     ports:
         - 3000:3000
-    entrypoint: ['nodemon', '/app/dist/app.js']
-
-# nginx:
-#     image: nginx
-#     ports:
-#         - 80:80
-#     links:
-#         - node
-#     volumes:
-#         - ./logs/nginx:/var/log/nginx
-#         - .:/var/www/html
