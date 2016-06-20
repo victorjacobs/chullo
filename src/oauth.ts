@@ -51,9 +51,9 @@ let grantToken = (client, user, cb) => {
         // TODO promise chaining here
         refreshToken.save((err, savedRefreshToken) => {
             if (err) return cb(err);
-            // Divide getTime() by thousand since the method returns milliseconds
+            // Manually round because momentjs uses floor instead of round
             return cb(null, accessToken.accessToken, refreshToken.refreshToken, {
-                expires_in: Math.round(savedAccessToken.expires.getTime() / 1000),
+                expires_in: Math.round(moment(savedAccessToken.expires).diff(moment(), 'seconds', true)),
             });
         });
     });
