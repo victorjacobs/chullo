@@ -12,7 +12,7 @@ interface IOAuthAccessToken extends mongoose.Document {
     expires: Date;
 }
 
-interface OAuthAccessTokenModel extends mongoose.Model<IOAuthAccessToken> {
+interface IOAuthAccessTokenModel extends mongoose.Model<IOAuthAccessToken> {
     newForClientAndUser(client: IOAuthClient, user: IUser): IOAuthAccessToken;
 }
 
@@ -24,7 +24,7 @@ let setRequiredDefaults = (token: IOAuthAccessToken) => {
     if (!token.expires) {
         token.expires = moment().add(1, 'days').toDate();
     }
-}
+};
 
 let schema = new mongoose.Schema({
     accessToken: {
@@ -32,19 +32,19 @@ let schema = new mongoose.Schema({
         required: true,
         index: {
             unique: true
-        }
+        },
     },
     clientId: {
         type: String,
-        required: true
+        required: true,
     },
     userId: {
         type: String,
-        required: true
+        required: true,
     },
     expires: {
         type: Date,
-        required: true
+        required: true,
     }
 })
     .pre('save', next => {
@@ -62,4 +62,4 @@ let schema = new mongoose.Schema({
     })
 ;
 
-export let OAuthAccessToken = <OAuthAccessTokenModel> mongoose.model<IOAuthAccessToken>('OAuthAccessToken', schema);
+export let OAuthAccessToken = <IOAuthAccessTokenModel> mongoose.model<IOAuthAccessToken>('OAuthAccessToken', schema);

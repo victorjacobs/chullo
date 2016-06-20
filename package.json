@@ -32,5 +32,9 @@
     "passport-http-bearer": "^1.0.1",
     "passport-oauth2-client-password": "^0.1.2",
     "typescript": "^1.7.5"
+  },
+  "devDependencies": {
+    "tslint": "^3.11.0",
+    "tslint-loader": "^2.1.4"
   }
 }

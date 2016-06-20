@@ -8,10 +8,10 @@ export interface IOAuthClient extends mongoose.Document {
 }
 
 let schema = new mongoose.Schema({
+    allowedGrantTypes: [String],
     clientId: String,
     clientSecret: String,
     redirectUri: String,
-    allowedGrantTypes: [String]
 });
 
 export let OAuthClient = mongoose.model<IOAuthClient>('OAuthClient', schema);

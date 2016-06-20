@@ -4,13 +4,11 @@ import * as compression from 'compression';
 import * as mongoose from 'mongoose';
 import * as oauth from './oauth';
 
-import {User} from './models/user';
-
 import * as routes from './routes';
 
 // Boot
 let app = express();
-mongoose.connect('mongodb://chulloserver_mongo_1/chullo');
+mongoose.connect('mongodb://localhost/chullo');
 
 // Compression
 app.use(compression());

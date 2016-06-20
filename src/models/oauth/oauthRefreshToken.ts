@@ -12,7 +12,7 @@ interface IOAuthRefreshToken extends mongoose.Document {
     expires: Date;
 }
 
-interface OAuthRefreshTokenModel extends mongoose.Model<IOAuthRefreshToken> {
+interface IOAuthRefreshTokenModel extends mongoose.Model<IOAuthRefreshToken> {
     newForClientAndUser(client: IOAuthClient, user: IUser): IOAuthRefreshToken;
 }
 
@@ -24,28 +24,28 @@ let setRequiredDefaults = (token: IOAuthRefreshToken) => {
     if (!token.expires) {
         token.expires = moment().add(1, 'weeks').toDate();
     }
-}
+};
 
 let schema = new mongoose.Schema({
     refreshToken: {
-        type: String,
-        required: true,
         index: {
-            unique: true
-        }
+            unique: true,
+        },
+        required: true,
+        type: String,
     },
     clientId: {
+        required: true,
         type: String,
-        required: true
     },
     userId: {
+        required: true,
         type: String,
-        required: true
     },
     expires: {
+        required: true,
         type: Date,
-        required: true
-    }
+    },
 })
     .pre('save', next => {
         let token: IOAuthRefreshToken = this;
@@ -61,4 +61,4 @@ let schema = new mongoose.Schema({
     })
 ;
 
-export let OAuthRefreshToken = <OAuthRefreshTokenModel> mongoose.model<IOAuthRefreshToken>('OAuthRefreshToken', schema);
+export let OAuthRefreshToken = <IOAuthRefreshTokenModel> mongoose.model<IOAuthRefreshToken>('OAuthRefreshToken', schema);

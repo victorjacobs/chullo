@@ -1,0 +1,9 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "comment-format": [ true ,"check-space"],
+        "quotemark": [true, "single"],
+        "no-console": [false],
+        "curly": false
+    }
+}

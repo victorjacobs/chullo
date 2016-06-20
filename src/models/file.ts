@@ -13,7 +13,7 @@ interface IFile extends mongoose.Document {
     lastAccess?: Date;
 }
 
-interface FileModel extends mongoose.Model<IFile> {
+interface IFileModel extends mongoose.Model<IFile> {
 
 }
 
@@ -24,31 +24,31 @@ let schema = new mongoose.Schema({
         required: true
     },
     path: {
-        type: String
+        type: String,
     },
     userId: {
         type: String,
         required: true,
-        index: true
+        index: true,
     },
     size: {
-        type: Number
+        type: Number,
     },
     mime: {
-        type: String
+        type: String,
     },
     accesses: {
         type: Number,
         required: true,
-        default: 0
+        default: 0,
     },
-    lastAccess: Date
+    lastAccess: Date,
 }, {
     toJSON: {
-        versionKey: false
+        versionKey: false,
     },
-    timestamps: {}
+    timestamps: {},
 });
 
 
-export let File = <FileModel> mongoose.model<IFile>('File', schema);
+export let File = <IFileModel> mongoose.model<IFile>('File', schema);

@@ -46,15 +46,18 @@ passport.use(new clientPassword.Strategy(
 let grantToken = (client, user, cb) => {
     let accessToken = OAuthAccessToken.newForClientAndUser(client, user);
     let refreshToken = OAuthRefreshToken.newForClientAndUser(client, user);
-    accessToken.save((err, token) => {
+    accessToken.save((err, savedAccessToken: any) => {
         if (err) return cb(err);
         // TODO promise chaining here
-        refreshToken.save((err, token) => {
+        refreshToken.save((err, savedRefreshToken) => {
             if (err) return cb(err);
-            return cb(null, accessToken.accessToken, refreshToken.refreshToken);
+            // Divide getTime() by thousand since the method returns milliseconds
+            return cb(null, accessToken.accessToken, refreshToken.refreshToken, {
+                expires_in: Math.round(savedAccessToken.expires.getTime() / 1000),
+            });
         });
     });
-}
+};
 
 export let server = oauth2orize.createServer();
 // Password grant

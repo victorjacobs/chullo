@@ -8,7 +8,7 @@ export interface IAccessLog extends mongoose.Document {
     kind: string;
 }
 
-interface AccessLogModel extends mongoose.Model<IAccessLog> {
+interface IAccessLogModel extends mongoose.Model<IAccessLog> {
 
 }
 
@@ -17,17 +17,17 @@ let schema = new mongoose.Schema({
     referer: String,
     fileId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
     },
     date: {
         type: Date,
         required: true,
-        default: Date.now
+        default: Date.now,
     },
     kind: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
 });
 
-export let AccessLog = <AccessLogModel> mongoose.model<IAccessLog>('AccessLog', schema);
+export let AccessLog = <IAccessLogModel> mongoose.model<IAccessLog>('AccessLog', schema);

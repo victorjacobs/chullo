@@ -11,7 +11,7 @@ export interface IUser extends mongoose.Document {
     id: string;
 };
 
-interface UserModel extends mongoose.Model<IUser> {
+interface IUserModel extends mongoose.Model<IUser> {
     findWithPassword(emailAddress: string, password: string, cb: (err: any, user?: IUser) => void): void;
 }
 
@@ -21,15 +21,15 @@ let schema = new mongoose.Schema({
         type: String,
         required: true,
         index: {
-            unique: true
-        }
+            unique: true,
+        },
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
     firstName: String,
-    lastName: String
+    lastName: String,
 })
     .pre('save', next => {
         let user: IUser = this;
@@ -51,9 +51,9 @@ let schema = new mongoose.Schema({
                 if (err || !same) return cb(err);
 
                 cb(null, user);
-            })
+            });
         });
     })
 ;
 
-export let User = <UserModel> mongoose.model<IUser>('User', schema);
+export let User = <IUserModel> mongoose.model<IUser>('User', schema);
