@@ -8,7 +8,6 @@ router.get('/', (req, res) => {
     // TODO pagination
     File.find({ userId: req.user._id }, '-userId -path', (err, results, next) => {
         if (err) return res.status(400).json(err);
-        if (results.length === 0) return res.status(204);
 
         res.json(results);
     })
