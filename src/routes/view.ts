@@ -40,7 +40,8 @@ router.get('/:fileId', (req, res) => {
         });
 
         res.setHeader('Content-Type', file.mime);
-        res.setHeader('Content-Disposition', 'inline; filename="' + file.name + '"');
+        res.setHeader('Content-Disposition', `inline; filename="${file.name}"`);
+        res.setHeader('Content-Length', file.size.toString());
 
         let fileStream = fs.createReadStream(file.path);
 

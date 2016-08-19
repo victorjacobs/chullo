@@ -20,20 +20,20 @@ router.get('/', (req, res) => {
             $group: {
                 _id: null,
                 totalSize: {
-                    $sum: "$size"
+                    $sum: '$size',
                 },
                 totalAccesses: {
-                    $sum: "$accesses"
+                    $sum: '$accesses',
                 },
                 totalTraffic: {
                     $sum: {
                         $multiply: [
-                            "$accesses",
-                            "$size"
-                        ]
-                    }
-                }
-            }
+                            '$accesses',
+                            '$size',
+                        ],
+                    },
+                },
+            },
         }, (err, aggregate) => {
             if (err) return reject(err);
             result.totalSize = aggregate[0].totalSize;
@@ -45,9 +45,9 @@ router.get('/', (req, res) => {
 
     Promise.all([
         countPromise,
-        totalSizePromise
+        totalSizePromise,
     ]).then(() => {
-        res.json(result)
+        res.json(result);
     });
 });
 

@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
         if (err) return res.status(400).json(err);
 
         res.json(results);
-    })
+    });
 });
 
 router.get('/:fileId', (req, res) => {
@@ -43,6 +43,5 @@ router.delete('/:fileId', (req, res) => {
         });
     });
 });
-
 
 export = router;

@@ -1,6 +1,5 @@
 import {Router} from 'express';
 import {File} from '../models/file';
-import * as fs from 'fs';
 
 let router = Router();
 

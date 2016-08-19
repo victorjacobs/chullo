@@ -21,7 +21,7 @@ interface IFileModel extends mongoose.Model<IFile> {
 let schema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     path: {
         type: String,
@@ -49,6 +49,5 @@ let schema = new mongoose.Schema({
     },
     timestamps: {},
 });
-
 
 export let File = <IFileModel> mongoose.model<IFile>('File', schema);

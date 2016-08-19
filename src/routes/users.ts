@@ -19,7 +19,7 @@ router.put('/me', (req, res) => {
     bcrypt.hash(req.body.password, 8, (err, hashed) => {
         if (err) return res.status(400).json(err);
         User.findOneAndUpdate({ _id: req.user._id }, {
-            password: hashed
+            password: hashed,
         }, (err, newUser) => {
             if (err) return res.status(400).json(err);
             return res.json(newUser);
