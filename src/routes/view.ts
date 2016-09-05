@@ -28,7 +28,7 @@ router.get('/:fileId', (req, res) => {
         // Create log entry
         let log = new AccessLog();
         log.fileId = file._id;
-        log.referer = req.get('Referrer');
+        log.referer = req.get('X-Real-IP');
         log.ip = req.ip;
         log.kind = 'view';
 
