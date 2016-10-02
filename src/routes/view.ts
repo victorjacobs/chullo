@@ -23,7 +23,7 @@ router.get('/:fileId', (req, res) => {
             });
         }
 
-        // Increment accesses and Create log entry
+        // Increment accesses and create log entry
         const log = new AccessLog();
         log.fileId = file._id;
         log.referer = req.get('Referer');

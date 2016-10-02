@@ -7,28 +7,45 @@ const router = Router();
 router.get('/:fileId', (req, res) => {
     File.findById(req.params.fileId).then(file => {
         if (!file) {
-            return Promise.reject('File not found');
+            return Promise.reject({
+                code: 404,
+                msg: 'File not found',
+            });
         }
 
-        // Create log entry
+        if (!file.size) {
+            return Promise.reject({
+                code: 404,
+                msg: 'File uploading',
+            });
+        }
+
+        // Increment accesses and create log entry
         const log = new AccessLog();
         log.fileId = file._id;
         log.referer = req.get('Referer');
         log.ip = req.get('X-Real-IP');
         log.kind = 'download';
 
-        return log.save().then(() => {
-            return file;
+        const fileUpdatePromise = File.findOneAndUpdate({_id: file._id}, {
+            $currentDate: { lastAccess: true },
+            $inc: { accesses: 1 },
         });
-    }, err => {
-        res.status(400).json(err);
-    }).then(file => {
-        res.setHeader('Content-Type', file.mime!);
+
+        return Promise.all([
+            fileUpdatePromise,
+            log.save(),
+        ]);
+    }).then(result => {
+        const file = result[0];
+        res.setHeader('Content-Type', file.mime);
         res.setHeader('Content-Length', file.size!.toString());
 
-        res.download(file.path!, file.name);
-    }, err => {
-        res.status(404).send({});
+        res.download(file.path, file.name);
+    }).catch(err => {
+        const code = err.code ? err.code : 400;
+        const msg = err.msg ? err.msg : undefined;
+        res.status(code).send(msg);
     });
 });
 

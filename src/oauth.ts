@@ -43,8 +43,11 @@ passport.use(new clientPassword.Strategy(
             }
 
             return done(null, client);
-        }, err => {
-            done(err);
+        }).catch(err => {
+            done({
+                message: err,
+                status: 400,
+            });
         });
     }
 ));
@@ -78,8 +81,11 @@ server.exchange(oauth2orize.exchange.password((client, username, password, scope
         }
 
         return grantToken(client, user, done);
-    }, err => {
-        done(err);
+    }).catch(err => {
+        done({
+            message: err,
+            status: 401,
+        });
     });
 }));
 
@@ -99,8 +105,11 @@ server.exchange(oauth2orize.exchange.refreshToken((client, refreshToken, scope, 
         // TODO explicitly remove the access token?
 
         return grantToken(client, { _id: token.userId }, done);
-    }, err => {
-        done(err);
+    }).catch(err => {
+        done({
+            message: err,
+            status: 401,
+        });
     });
 }));
 

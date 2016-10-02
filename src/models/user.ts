@@ -48,12 +48,14 @@ let schema = new mongoose.Schema({
                 return Promise.reject('User not found');
             }
 
-            bcrypt.compare(password, user.password, (err, same) => {
-                if (err || !same) {
-                    return Promise.reject('Password does not match');
-                }
+            return new Promise((resolve, reject) => {
+                bcrypt.compare(password, user.password, (err, same) => {
+                    if (err || !same) {
+                        return reject('Password does not match');
+                    }
 
-                return Promise.resolve(user);
+                    return resolve(user);
+                });
             });
         });
     })
