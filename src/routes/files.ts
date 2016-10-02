@@ -1,14 +1,32 @@
 import { Router } from 'express';
 import { File } from '../models/file';
+import paginate from '../response/paginate';
+import sort from '../query/sort';
 import * as fs from 'fs';
 
 const router = Router();
 
 router.get('/', (req, res) => {
-    // TODO pagination
-    File.find({ userId: req.user._id }, '-userId -path').then(files => {
-        res.json(files);
-    });
+    const pageSize = req.query.page_size || 10;
+    const page = req.query.page || 1;
+    const sortField = req.query.sort || 'createdAt';
+    const sortDirection = req.query.direction || 'descending';
+    const searchString = req.query.query;
+
+    let queryOpts = { userId: req.user._id };
+
+    if (searchString) {
+        Object.assign(queryOpts, {
+            name: new RegExp(searchString, 'i'),
+        });
+    }
+
+    let query = File.find(queryOpts, '-userId -path');
+    if (!!sortField) {
+        query = sort(query, sortField, sortDirection);
+    }
+
+    paginate(query, res, page, pageSize);
 });
 
 router.get('/:fileId', (req, res) => {

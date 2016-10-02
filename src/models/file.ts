@@ -29,6 +29,7 @@ let schema = new mongoose.Schema({
         type: String,
     },
     name: {
+        index: true,
         required: true,
         type: String,
     },
