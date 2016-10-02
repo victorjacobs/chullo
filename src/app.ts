@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
@@ -7,17 +8,12 @@ import * as oauth from './oauth';
 import * as routes from './routes';
 
 // Boot
-let app = express();
+const app = express();
+(mongoose as any).Promise = Promise;
 mongoose.connect('mongodb://localhost/chullo');
 
 // Compression
 app.use(compression());
-
-// Set return content type to json
-app.use((req, res, next) => {
-    res.setHeader('Content-Type', 'application/json');
-    next();
-});
 
 // TODO make empty responses consistent by using middleware
 

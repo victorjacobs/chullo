@@ -28,28 +28,28 @@ let setRequiredDefaults = (token: IOAuthAccessToken) => {
 
 let schema = new mongoose.Schema({
     accessToken: {
-        type: String,
-        required: true,
         index: {
-            unique: true
+            unique: true,
         },
+        required: true,
+        type: String,
     },
     clientId: {
-        type: String,
         required: true,
-    },
-    userId: {
         type: String,
-        required: true,
     },
     expires: {
-        type: Date,
         required: true,
-    }
+        type: Date,
+    },
+    userId: {
+        required: true,
+        type: String,
+    },
 })
     .pre('save', next => {
         let token: IOAuthAccessToken = this;
-        setRequiredDefaults(this);
+        setRequiredDefaults(token);
         next();
     })
     .static('newForClientAndUser', (client: IOAuthClient, user: IUser) => {
@@ -62,4 +62,4 @@ let schema = new mongoose.Schema({
     })
 ;
 
-export let OAuthAccessToken = <IOAuthAccessTokenModel> mongoose.model<IOAuthAccessToken>('OAuthAccessToken', schema);
+export const OAuthAccessToken = <IOAuthAccessTokenModel> mongoose.model<IOAuthAccessToken>('OAuthAccessToken', schema);

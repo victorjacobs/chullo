@@ -13,21 +13,21 @@ interface IAccessLogModel extends mongoose.Model<IAccessLog> {
 }
 
 let schema = new mongoose.Schema({
-    ip: String,
-    referer: String,
-    fileId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-    },
     date: {
-        type: Date,
-        required: true,
         default: Date.now,
-    },
-    kind: {
-        type: String,
         required: true,
+        type: Date,
     },
+    fileId: {
+        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+    },
+    ip: String,
+    kind: {
+        required: true,
+        type: String,
+    },
+    referer: String,
 });
 
-export let AccessLog = <IAccessLogModel> mongoose.model<IAccessLog>('AccessLog', schema);
+export const AccessLog = <IAccessLogModel> mongoose.model<IAccessLog>('AccessLog', schema);

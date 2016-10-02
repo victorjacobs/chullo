@@ -19,35 +19,35 @@ interface IFileModel extends mongoose.Model<IFile> {
 
 // Schema
 let schema = new mongoose.Schema({
-    name: {
-        type: String,
+    accesses: {
+        default: 0,
         required: true,
+        type: Number,
+    },
+    lastAccess: Date,
+    mime: {
+        type: String,
+    },
+    name: {
+        required: true,
+        type: String,
     },
     path: {
         type: String,
     },
-    userId: {
-        type: String,
-        required: true,
-        index: true,
-    },
     size: {
         type: Number,
     },
-    mime: {
+    userId: {
+        index: true,
+        required: true,
         type: String,
     },
-    accesses: {
-        type: Number,
-        required: true,
-        default: 0,
-    },
-    lastAccess: Date,
 }, {
+    timestamps: {},
     toJSON: {
         versionKey: false,
     },
-    timestamps: {},
 });
 
-export let File = <IFileModel> mongoose.model<IFile>('File', schema);
+export const File = <IFileModel> mongoose.model<IFile>('File', schema);

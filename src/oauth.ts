@@ -12,8 +12,7 @@ import {OAuthClient} from './models/oauth/oauthClient';
 // Bearer strategy
 passport.use(new bearer.Strategy(
     (token, done) => {
-        OAuthAccessToken.findOne({ accessToken: token }, (err, accessToken) => {
-            if (err) return done(err);
+        OAuthAccessToken.findOne({ accessToken: token }).then(accessToken => {
             if (!accessToken) return done(null, false);
 
             if (moment(accessToken.expires).isBefore(moment())) {
@@ -22,10 +21,15 @@ passport.use(new bearer.Strategy(
                 return done(null, false);
             }
 
-            User.findOne({ _id: accessToken.userId }, (err, user) => {
-                if (!user) return done(null, false);
-                return done(null, user);
-            });
+            return User.findOne({ _id: accessToken.userId });
+        }, err => {
+            done(err);
+        }).then(user => {
+            if (!user) {
+                return done(null, false);
+            }
+
+            return done(null, user);
         });
     }
 ));
@@ -33,48 +37,59 @@ passport.use(new bearer.Strategy(
 // Clientid and secret
 passport.use(new clientPassword.Strategy(
     (clientId, clientSecret, done) => {
-        OAuthClient.findOne({ clientId: clientId, clientSecret: clientSecret}, (err, client) => {
-            if (err) return done(err);
-            if (!client) return done(null, false);
+        OAuthClient.findOne({ clientId: clientId, clientSecret: clientSecret }).then(client => {
+            if (!client) {
+                return done(null, false);
+            }
 
             return done(null, client);
+        }, err => {
+            done(err);
         });
     }
 ));
 
 // Create access/refresh token pair
-let grantToken = (client, user, cb) => {
-    let accessToken = OAuthAccessToken.newForClientAndUser(client, user);
-    let refreshToken = OAuthRefreshToken.newForClientAndUser(client, user);
-    accessToken.save((err, savedAccessToken: any) => {
-        if (err) return cb(err);
-        // TODO promise chaining here
-        refreshToken.save((err, savedRefreshToken) => {
-            if (err) return cb(err);
-            // Manually round because momentjs uses floor instead of round
-            return cb(null, accessToken.accessToken, refreshToken.refreshToken, {
-                expires_in: Math.round(moment(savedAccessToken.expires).diff(moment(), 'seconds', true)),
-            });
+// TODO change this so it returns a Promise instead of doing callback
+const grantToken = (client, user, cb) => {
+    const accessToken = OAuthAccessToken.newForClientAndUser(client, user);
+    const refreshToken = OAuthRefreshToken.newForClientAndUser(client, user);
+    Promise.all([
+        accessToken.save(),
+        refreshToken.save(),
+    ]).then(result => {
+        const savedAccessToken = result[0];
+
+        // Manually round because momentjs uses floor instead of round
+        return cb(null, accessToken.accessToken, refreshToken.refreshToken, {
+            expires_in: Math.round(moment(savedAccessToken.expires).diff(moment(), 'seconds', true)),
         });
+    }).catch(err => {
+        cb(err);
     });
 };
 
-export let server = oauth2orize.createServer();
+export const server = oauth2orize.createServer();
 // Password grant
 server.exchange(oauth2orize.exchange.password((client, username, password, scope, done) => {
-    User.findWithPassword(username, password, (err, user) => {
-        if (err) return done(err);
-        if (!user) return done(null, false);
+    User.findWithPassword(username, password).then(user => {
+        if (!user) {
+            return done(null, false);
+        }
 
         return grantToken(client, user, done);
+    }, err => {
+        done(err);
     });
 }));
 
 // Refresh token grant
 server.exchange(oauth2orize.exchange.refreshToken((client, refreshToken, scope, done) => {
-    OAuthRefreshToken.findOne({ refreshToken: refreshToken }, (err, token) => {
-        if (err) return done(err);
-        if (!token) return done(null, false);
+    OAuthRefreshToken.findOne({ refreshToken: refreshToken }).then(token =>  {
+        if (!token) {
+            return done(null, false);
+        }
+
         if (moment(token.expires).isBefore(moment())) {
             OAuthRefreshToken.findById(token._id).remove().exec();
             return done(null, false);
@@ -84,8 +99,10 @@ server.exchange(oauth2orize.exchange.refreshToken((client, refreshToken, scope, 
         // TODO explicitly remove the access token?
 
         return grantToken(client, { _id: token.userId }, done);
+    }, err => {
+        done(err);
     });
 }));
 
-export let isBearerAuthenticated = passport.authenticate('bearer', { session: false });
-export let isClientAuthenticated = passport.authenticate('oauth2-client-password', { session: false });
+export const isBearerAuthenticated = passport.authenticate('bearer', { session: false });
+export const isClientAuthenticated = passport.authenticate('oauth2-client-password', { session: false });

@@ -27,6 +27,14 @@ let setRequiredDefaults = (token: IOAuthRefreshToken) => {
 };
 
 let schema = new mongoose.Schema({
+    clientId: {
+        required: true,
+        type: String,
+    },
+    expires: {
+        required: true,
+        type: Date,
+    },
     refreshToken: {
         index: {
             unique: true,
@@ -34,17 +42,9 @@ let schema = new mongoose.Schema({
         required: true,
         type: String,
     },
-    clientId: {
-        required: true,
-        type: String,
-    },
     userId: {
         required: true,
         type: String,
-    },
-    expires: {
-        required: true,
-        type: Date,
     },
 })
     .pre('save', next => {
@@ -61,4 +61,4 @@ let schema = new mongoose.Schema({
     })
 ;
 
-export let OAuthRefreshToken = <IOAuthRefreshTokenModel> mongoose.model<IOAuthRefreshToken>('OAuthRefreshToken', schema);
+export const OAuthRefreshToken = <IOAuthRefreshTokenModel> mongoose.model<IOAuthRefreshToken>('OAuthRefreshToken', schema);

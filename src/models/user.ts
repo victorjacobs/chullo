@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import * as _ from 'lodash';
 
 // Typescript types
 export interface IUser extends mongoose.Document {
@@ -12,24 +11,24 @@ export interface IUser extends mongoose.Document {
 };
 
 interface IUserModel extends mongoose.Model<IUser> {
-    findWithPassword(emailAddress: string, password: string, cb: (err: any, user?: IUser) => void): void;
+    findWithPassword(emailAddress: string, password: string): Promise<IUser>;
 }
 
 // Mongoose schema
 let schema = new mongoose.Schema({
     emailAddress: {
-        type: String,
-        required: true,
         index: {
             unique: true,
         },
-    },
-    password: {
-        type: String,
         required: true,
+        type: String,
     },
     firstName: String,
     lastName: String,
+    password: {
+        required: true,
+        type: String,
+    },
 })
     .pre('save', next => {
         let user: IUser = this;
@@ -43,14 +42,18 @@ let schema = new mongoose.Schema({
             next();
         });
     })
-    .static('findWithPassword', (emailAddress: string, password: string, cb: (any, IUser?) => void) => {
-        User.findOne({ emailAddress: emailAddress }, (err, user) => {
-            if (err || _.isNull(user)) return cb(err, user);
+    .static('findWithPassword', (emailAddress: string, password: string) => {
+        return User.findOne({ emailAddress: emailAddress }).then(user => {
+            if (!user) {
+                return Promise.reject('User not found');
+            }
 
             bcrypt.compare(password, user.password, (err, same) => {
-                if (err || !same) return cb(err);
+                if (err || !same) {
+                    return Promise.reject('Password does not match');
+                }
 
-                cb(null, user);
+                return Promise.resolve(user);
             });
         });
     })

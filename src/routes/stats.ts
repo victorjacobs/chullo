@@ -1,46 +1,37 @@
-import {Router} from 'express';
-import {File} from '../models/file';
-import {AccessLog} from '../models/accessLog';
-import {Promise} from 'es6-promise';
+import { Router } from 'express';
+import { File } from '../models/file';
 
 let router = Router();
 
 router.get('/', (req, res) => {
     let result: any = {};
 
-    let countPromise = new Promise((resolve, reject) => {
-        File.count({}, (err, count) => {
-            result.files = count;
-            resolve();
-        });
+    const countPromise = File.count({}).then(count => {
+        result.files = count;
     });
 
-    let totalSizePromise = new Promise((resolve, reject) => {
-        File.aggregate({
-            $group: {
-                _id: null,
-                totalSize: {
-                    $sum: '$size',
-                },
-                totalAccesses: {
-                    $sum: '$accesses',
-                },
-                totalTraffic: {
-                    $sum: {
-                        $multiply: [
-                            '$accesses',
-                            '$size',
-                        ],
-                    },
+    const totalSizePromise = File.aggregate({
+        $group: {
+            _id: null,
+            totalAccesses: {
+                $sum: '$accesses',
+            },
+            totalSize: {
+                $sum: '$size',
+            },
+            totalTraffic: {
+                $sum: {
+                    $multiply: [
+                        '$accesses',
+                        '$size',
+                    ],
                 },
             },
-        }, (err, aggregate) => {
-            if (err) return reject(err);
-            result.totalSize = aggregate[0].totalSize;
-            result.totalTraffic = aggregate[0].totalTraffic;
-            result.totalAccesses = aggregate[0].totalAccesses;
-            resolve();
-        });
+        },
+    }).then(aggregate => {
+        result.totalSize = (aggregate[0] as any).totalSize;
+        result.totalTraffic = (aggregate[0] as any).totalTraffic;
+        result.totalAccesses = (aggregate[0] as any).totalAccesses;
     });
 
     Promise.all([

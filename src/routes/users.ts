@@ -1,9 +1,9 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import * as bcrypt from 'bcrypt';
 
-import {User} from '../models/user';
+import { User } from '../models/user';
 
-let router = Router();
+const router = Router();
 
 // Get currently logged in user
 router.get('/me', (req, res) => {
@@ -20,9 +20,10 @@ router.put('/me', (req, res) => {
         if (err) return res.status(400).json(err);
         User.findOneAndUpdate({ _id: req.user._id }, {
             password: hashed,
-        }, (err, newUser) => {
-            if (err) return res.status(400).json(err);
-            return res.json(newUser);
+        }).then(updatedUser => {
+            res.json(updatedUser);
+        }, saveErr => {
+            res.status(400).send(saveErr);
         });
     });
 });
