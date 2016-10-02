@@ -28,7 +28,7 @@ app.use('/upload', oauth.isBearerAuthenticated, routes.upload);
 app.use(bodyParser.json());
 app.use('/files', oauth.isBearerAuthenticated, routes.files);
 app.use('/users', oauth.isBearerAuthenticated, routes.users);
-app.use('/stats', oauth.isBearerAuthenticated, routes.stats);
+app.use('/status', oauth.isBearerAuthenticated, routes.status);
 
 // app.use(oauth.errorHandler());
 
