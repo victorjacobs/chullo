@@ -1,8 +1,11 @@
+import * as fs from 'fs';
 import { Router } from 'express';
+
 import { File } from '../models/file';
 import paginate from '../response/paginate';
 import sort from '../query/sort';
-import * as fs from 'fs';
+import * as glob from 'glob';
+import rejectionUnpacker from '../response/rejectionUnpacker';
 
 const router = Router();
 
@@ -57,11 +60,21 @@ router.post('/', (req, res) => {
 
 router.delete('/:fileId', (req, res) => {
     File.findOneAndRemove({ _id: req.params.fileId, userId: req.user._id }).then(file => {
-        fs.unlinkSync(file.path!);
+        if (!file) {
+            return Promise.reject({
+                code: 404,
+                msg: 'File not found',
+            });
+        }
+
+        glob(`${file.path}*`, (err, files) => {
+            for (let fileToUnlink of files) {
+                fs.unlink(fileToUnlink);
+            }
+        });
+
         res.status(204).send({});
-    }, err => {
-        res.status(400).send(err);
-    });
+    }).catch(rejectionUnpacker(res));
 });
 
 export = router;

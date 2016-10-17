@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { File } from '../models/file';
 import * as fs from 'fs';
 import { AccessLog } from '../models/accessLog';
+import rejectionUnpacker from '../response/rejectionUnpacker';
 
 // TODO typings
 const sharp = require('sharp');
@@ -51,11 +52,7 @@ router.get('/:fileId', (req, res) => {
         let fileStream = fs.createReadStream(file.path);
 
         fileStream.pipe(res);
-    }).catch(err => {
-        const code = err.code ? err.code : 400;
-        const msg = err.msg ? err.msg : undefined;
-        res.status(code).send(msg);
-    });
+    }).catch(rejectionUnpacker(res));
 });
 
 router.get('/:fileId/thumb', (req, res) => {
@@ -102,11 +99,7 @@ router.get('/:fileId/thumb', (req, res) => {
         let fileStream = fs.createReadStream(thumbPath(file.path));
 
         fileStream.pipe(res);
-    }).catch(err => {
-        const code = err.code ? err.code : 400;
-        const msg = err.msg ? err.msg : undefined;
-        res.status(code).send(msg);
-    });
+    }).catch(rejectionUnpacker(res));
 });
 
 export = router;

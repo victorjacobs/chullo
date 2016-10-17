@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { File } from '../models/file';
 import * as multer from 'multer';
+import rejectionUnpacker from '../response/rejectionUnpacker';
 
 const upload = multer({ dest: './uploads/' });
 const router = Router();
@@ -37,12 +38,7 @@ router.post('/:fileId', upload.single('file'), (req, res) => {
         });
     }).then(updatedFile => {
         res.send(updatedFile);
-    }).catch(err => {
-        const code = err.code ? err.code : 400;
-        const msg = err.msg ? err.msg : undefined;
-
-        res.status(code).send(msg);
-    });
+    }).catch(rejectionUnpacker(res));
 });
 
 export = router;
