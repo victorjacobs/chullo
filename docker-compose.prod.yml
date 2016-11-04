@@ -1,8 +1,0 @@
-node:
-    volumes_from:
-        - data
-    entrypoint: ["forever", "/app/dist/app.js"]
-data:
-    image: busybox
-    volumes:
-        - /app/uploads

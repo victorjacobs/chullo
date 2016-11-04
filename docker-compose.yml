@@ -1,16 +1,23 @@
-mongo_data:
-    image: busybox
-    volumes:
-        - /data/db
-mongo:
-    image: mongo:3.2
-    ports:
-        - 27017:27017
-    volumes_from:
-        - mongo_data
-node:
-    image: vjacobs/chullo
-    links:
-        - mongo
-    ports:
-        - 3000:3000
+version: '2'
+services:
+    chullo:
+        build: .
+        environment:
+            - MONGO_HOST=mongodb
+        ports:
+            - 3000:3000
+        volumes:
+            - chullo_volume:/app/uploads
+    # mongodb:
+    #     build: containers/mongodb
+    #     volumes:
+    #         - mongodb_volume:/data/db
+    mongodb:
+        image: mongo:latest
+        ports:
+            - 27017:27017
+        volumes:
+            - mongodb_volume:/data/db
+volumes:
+    mongodb_volume: ~
+    chullo_volume: ~

@@ -1,6 +1,6 @@
 import { DocumentQuery } from 'mongoose';
 
-type SortDirection = "ascending" | "descending" | "asc" | "desc";
+type SortDirection = 'ascending' | 'descending' | 'asc' | 'desc';
 
 const sort = (query: DocumentQuery<any, any>, sortField: string, direction: SortDirection): DocumentQuery<any, any> => {
     const sortOptions = {};

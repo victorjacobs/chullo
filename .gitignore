@@ -7,3 +7,4 @@ node_modules/
 uploads/*
 !.gitkeep
 _*
+npm-debug.log

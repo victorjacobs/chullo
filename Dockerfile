@@ -1,11 +1,35 @@
-FROM node:6.1
+FROM alpine:3.4
 MAINTAINER Victor Jacobs <victor@chullo.io>
 
-RUN npm install -g typings tsc forever nodemon
+# Install dumb-init
+RUN apk add --no-cache --virtual .build-deps \
+        alpine-sdk \
+        bash \
+        wget \
+    && mkdir /tmp/build \
+    && cd /tmp/build \
+    && wget https://github.com/Yelp/dumb-init/archive/v1.2.0.tar.gz \
+    && tar -xf v1.2.0.tar.gz \
+    && cd dumb-init-1.2.0 \
+    && make \
+    && mv dumb-init /usr/local/bin \
+    && cd && rm -rf /tmp/build \
+    && apk del .build-deps
+
+# Node and npm packages
+RUN apk add --no-cache nodejs \
+    && npm install -g typescript forever
 
 COPY . /app
 WORKDIR /app
-RUN npm install --unsafe-perm
+RUN apk add --no-cache --virtual .build-deps \
+        alpine-sdk \
+        python \
+    && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+        vips-dev \
+    && npm install --production \
+    && npm run build \
+    && apk del .build-deps
 
 EXPOSE 3000
-ENTRYPOINT ["forever", dist/app.js"]
+CMD ["dumb-init", "forever", "dist/app.js"]
