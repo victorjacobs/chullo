@@ -29,6 +29,7 @@ RUN apk add --no-cache --virtual .build-deps \
         vips-dev \
     && npm install --production \
     && npm run build \
+    && git rev-parse HEAD > dist/VERSION \
     && apk del .build-deps
 
 EXPOSE 3000

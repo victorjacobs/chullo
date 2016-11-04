@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { File } from '../models/file';
 import { AccessLog } from '../models/accessLog';
+import rejectionUnpacker from '../response/rejectionUnpacker';
 
 const router = Router();
 
@@ -42,11 +43,7 @@ router.get('/:fileId', (req, res) => {
         res.setHeader('Content-Length', file.size!.toString());
 
         res.download(file.path, file.name);
-    }).catch(err => {
-        const code = err.code ? err.code : 400;
-        const msg = err.msg ? err.msg : undefined;
-        res.status(code).send(msg);
-    });
+    }).catch(rejectionUnpacker(res));
 });
 
 export = router;
