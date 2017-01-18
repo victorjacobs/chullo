@@ -18,16 +18,17 @@ RUN apk add --no-cache --virtual .build-deps \
 
 # Node and npm packages
 RUN apk add --no-cache nodejs \
-    && npm install -g typescript forever
+    && npm install -g typescript forever yarn
 
 COPY . /app
 WORKDIR /app
+VOLUME /app/uploads
 RUN apk add --no-cache --virtual .build-deps \
         alpine-sdk \
         python \
     && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
         vips-dev \
-    && npm install --production \
+    && yarn install --production \
     && npm run build \
     && git rev-parse HEAD > dist/VERSION \
     && apk del .build-deps

@@ -15,7 +15,7 @@ You can run the server in one of two ways. Either with docker-compose or by inst
 
 ### Manual
 
-1. Install dependencies: MongoDB, Node, Typescript (and maybe some sort of toolchain to build *bcrypt* and *sharp*)
-2. `npm install`
+1. Install dependencies: MongoDB, Node, Typescript, Yarn (and maybe some sort of toolchain to build *bcrypt* and *sharp*)
+2. `yarn install`
 3. `node dist/app.js`
 4. Application is running on port 3000
